@@ -8,3 +8,20 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/tylercd100/monolog-plivo.svg?style=flat-square)](https://packagist.org/packages/tylercd100/monolog-plivo)
 
 A Monolog Handler for [Plivo](https://www.plivo.com/), a SMS messaging service.
+
+## Installation
+
+Install via [composer](https://getcomposer.org/) - In the terminal:
+```bash
+composer require tylercd100/monolog-plivo
+```
+
+## Usage
+```php
+use Tylercd100\Monolog\Handler\PlivoHandler;
+
+$handler = new PlivoHandler($token,$auth_id,$fromPhoneNumber,$toPhoneNumber);
+$logger  = new Monolog\Logger('plivo.example');
+$logger->pushHandler($handler);
+$logger->addCritical("Foo Bar!");
+```
