@@ -4,19 +4,19 @@ namespace Tylercd100\Monolog\Tests;
 
 use Exception;
 use PHPUnit_Framework_TestCase;
-use Tylercd100\Monolog\Handler\PlivoHandler;
+use Tylercd100\Monolog\Handler\TwilioHandler;
 use Monolog\Logger;
 use Tylercd100\Monolog\Tests\TestCase;
 
-class PlivoHandlerTest extends TestCase
+class TwilioHandlerTest extends TestCase
 {
     private $res;
-    /** @var  PlivoHandler */
+    /** @var  TwilioHandler */
     private $handler;
     
     public function testCanBeInstantiatedAndProvidesDefaultFormatter()
     {
-        $handler = new PlivoHandler('token', 'auth_id', '+15555555555', '+16666666666');
+        $handler = new TwilioHandler('token', 'auth_id', '+15555555555', '+16666666666');
 
         $this->assertInstanceOf('Tylercd100\\Monolog\\Formatter\\SMSFormatter', $handler->getFormatter());
         $this->assertAttributeEquals('token',        'authToken',  $handler);
@@ -28,7 +28,7 @@ class PlivoHandlerTest extends TestCase
     public function testItThrowsExceptionWhenUsingDifferentVersionOtherThanV1()
     {
         $this->setExpectedException(Exception::class);
-        $handler = new PlivoHandler('token', 'auth_id', '+15555555555', '+16666666666', Logger::CRITICAL, true, true, 'plivo.foo.bar', 'v2');
+        $handler = new TwilioHandler('token', 'auth_id', '+15555555555', '+16666666666', Logger::CRITICAL, true, true, 'twilio.foo.bar', 'v2');
     }
 
     public function testWriteHeader()
@@ -38,19 +38,19 @@ class PlivoHandlerTest extends TestCase
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/POST \/v1\/Account\/auth_id\/Message\/ HTTP\/1.1\\r\\nHost: api.plivo.com\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
+        $this->assertRegexp('/POST \/2010-04-01\/Accounts\/auth_id\/Messages\.json HTTP\/1.1\\r\\nHost: api.twilio.com\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
 
         return $content;
     }
 
     public function testWriteCustomHostHeader()
     {
-        $this->createHandler('token', 'auth_id', '+15555555555', '+16666666666', Logger::CRITICAL, true, true, 'plivo.foo.bar');
+        $this->createHandler('token', 'auth_id', '+15555555555', '+16666666666', Logger::CRITICAL, true, true, 'twilio.foo.bar');
         $this->handler->handle($this->getRecord(Logger::CRITICAL, 'test1'));
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/POST \/v1\/Account\/auth_id\/Message\/ HTTP\/1.1\\r\\nHost: plivo.foo.bar\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
+        $this->assertRegexp('/POST \/2010-04-01\/Accounts\/auth_id\/Messages.json HTTP\/1.1\\r\\nHost: twilio.foo.bar\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
 
         return $content;
     }
@@ -60,17 +60,17 @@ class PlivoHandlerTest extends TestCase
      */
     public function testWriteContent($content)
     {
-        $this->assertRegexp('/{"src":"\+15555555555","dst":"\+16666666666","text":"test1"}/', $content);
+        $this->assertRegexp('/{"From":"\+15555555555","To":"\+16666666666","Body":"test1"}/', $content);
     }
 
     public function testWriteContentV1WithoutToAndFromNumbers()
     {
-        $this->createHandler('token', 'auth_id', false, null, Logger::CRITICAL, true, true, 'plivo.foo.bar');
+        $this->createHandler('token', 'auth_id', false, null, Logger::CRITICAL, true, true, 'twilio.foo.bar');
         $this->handler->handle($this->getRecord(Logger::CRITICAL, 'test1'));
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/{"src":false,"dst":null,"text":"test1"}/', $content);
+        $this->assertRegexp('/{"From":false,"To":null,"Body":"test1"}/', $content);
 
         return $content;
     }
@@ -80,7 +80,7 @@ class PlivoHandlerTest extends TestCase
      */
     public function testWriteContentNotify($content)
     {
-        $this->assertRegexp('/{"src":"\+15555555555","dst":"\+16666666666","text":"test1"}/', $content);
+        $this->assertRegexp('/{"From":"\+15555555555","To":"\+16666666666","Body":"test1"}/', $content);
     }
 
     public function testWriteWithComplexMessage()
@@ -90,15 +90,15 @@ class PlivoHandlerTest extends TestCase
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/{"src":"\+15555555555","dst":"\+16666666666","text":"Backup of database example finished in 16 minutes\."}/', $content);
+        $this->assertRegexp('/{"From":"\+15555555555","To":"\+16666666666","Body":"Backup of database example finished in 16 minutes\."}/', $content);
     }
 
-    private function createHandler($authToken = 'token', $authId = 'auth_id', $fromNumber = '+15555555555', $toNumber = '+16666666666', $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = PlivoHandler::API_V1)
+    private function createHandler($authToken = 'token', $authId = 'auth_id', $fromNumber = '+15555555555', $toNumber = '+16666666666', $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.twilio.com', $version = TwilioHandler::API_V1)
     {
         $constructorArgs = array($authToken, $authId, $fromNumber, $toNumber, Logger::DEBUG, true, true, $host, $version);
         $this->res = fopen('php://memory', 'a');
         $this->handler = $this->getMock(
-            '\Tylercd100\Monolog\Handler\PlivoHandler',
+            '\Tylercd100\Monolog\Handler\TwilioHandler',
             array('fsockopen', 'streamSetTimeout', 'closeSocket'),
             $constructorArgs
         );

@@ -5,9 +5,9 @@ namespace Tylercd100\Monolog\Formatter;
 use Monolog\Formatter\LineFormatter;
 
 /**
-* Plivo - Monolog Formatter
+* SMS - Monolog Formatter
 */
-class PlivoFormatter extends LineFormatter
+class SMSFormatter extends LineFormatter
 {
     
     const SIMPLE_FORMAT = "%level_name%: %message% %context% %extra%";

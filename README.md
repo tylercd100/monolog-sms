@@ -1,4 +1,4 @@
-# Plivo - Monolog Handler
+# SMS Monolog Handler
 [![GitHub version](https://badge.fury.io/gh/tylercd100%2Fmonolog-plivo.svg)](https://badge.fury.io/gh/tylercd100%2Fmonolog-plivo)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://travis-ci.org/tylercd100/monolog-plivo.svg?branch=master)](https://travis-ci.org/tylercd100/monolog-plivo)
