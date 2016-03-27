@@ -1,5 +1,15 @@
 {
     "name": "tylercd100/monolog-plivo",
+    "description": "A Monolog Handler for Plivo, a SMS messaging service.",
+    "keywords": [
+        "monolog",
+        "plivo",
+        "handler",
+        "composer",
+        "tylercd100"
+    ],
+    "homepage": "https://github.com/tylercd100/monolog-plivo",
+    "license": "MIT",
     "autoload":{
         "psr-4":{
             "Tylercd100\\Monolog\\":"src/"
