@@ -7,7 +7,11 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/56f3252c35630e0029db0187/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56f3252c35630e0029db0187)
 [![Total Downloads](https://img.shields.io/packagist/dt/tylercd100/monolog-plivo.svg?style=flat-square)](https://packagist.org/packages/tylercd100/monolog-plivo)
 
-A Monolog Handler for [Plivo](https://www.plivo.com/), a SMS messaging service.
+A Monolog Handler for SMS messaging services
+
+Currently supported
+- [Plivo](https://www.plivo.com/)
+- [Twilio](https://www.twilio.com/)
 
 ## Installation
 
@@ -22,6 +26,16 @@ For Plivo:
 use Tylercd100\Monolog\Handler\PlivoHandler;
 
 $handler = new PlivoHandler($token,$auth_id,$fromPhoneNumber,$toPhoneNumber);
+$logger  = new Monolog\Logger('plivo.example');
+$logger->pushHandler($handler);
+$logger->addCritical("Foo Bar!");
+```
+
+For Twilio:
+```php
+use Tylercd100\Monolog\Handler\TwilioHandler;
+
+$handler = new TwilioHandler($secret,$sid,$fromPhoneNumber,$toPhoneNumber);
 $logger  = new Monolog\Logger('plivo.example');
 $logger->pushHandler($handler);
 $logger->addCritical("Foo Bar!");
