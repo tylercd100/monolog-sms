@@ -13,10 +13,11 @@ A Monolog Handler for [Plivo](https://www.plivo.com/), a SMS messaging service.
 
 Install via [composer](https://getcomposer.org/) - In the terminal:
 ```bash
-composer require tylercd100/monolog-plivo
+composer require tylercd100/monolog-sms
 ```
 
 ## Usage
+For Plivo:
 ```php
 use Tylercd100\Monolog\Handler\PlivoHandler;
 
