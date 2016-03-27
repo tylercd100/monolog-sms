@@ -1,9 +1,10 @@
 {
     "name": "tylercd100/monolog-sms",
-    "description": "A Monolog Handler for Plivo, a SMS messaging service.",
+    "description": "A Monolog Handler for SMS messaging services such as Plivo and Twilio.",
     "keywords": [
         "monolog",
         "plivo",
+        "twilio",
         "handler",
         "composer",
         "tylercd100"
