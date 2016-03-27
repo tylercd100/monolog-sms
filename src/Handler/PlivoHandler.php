@@ -117,11 +117,7 @@ class PlivoHandler extends SocketHandler
     {
         $auth = base64_encode($this->authId.":".$this->authToken);
 
-        if ($this->version == self::API_V1) {
-            $header = "POST /v1/Account/{$this->authId}/Message/ HTTP/1.1\r\n";
-        } else {
-            throw new Exception('API Version \'{$version}\' is not supported!');
-        }
+        $header = "POST /v1/Account/{$this->authId}/Message/ HTTP/1.1\r\n";
 
         $header .= "Host: {$this->host}\r\n";
         $header .= "Authorization: Basic ".$auth."\r\n";;
