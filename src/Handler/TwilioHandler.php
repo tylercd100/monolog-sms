@@ -26,13 +26,14 @@ class TwilioHandler extends SMSHandler
      * @param bool   $useSSL     Whether to connect via SSL.
      * @param string $host       The Twilio server hostname.
      * @param string $version    The Twilio API version (default TwilioHandler::API_V1)
+     * @param string $limit      The character limit
      */
-    public function __construct($secret, $sid, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.twilio.com', $version = self::API_V1)
+    public function __construct($secret, $sid, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.twilio.com', $version = self::API_V1, $limit = 160)
     {
         if($version !== self::API_V1){
             throw new Exception('API Version \'{$version}\' is not supported!');
         }
-        parent::__construct($secret, $sid, $fromNumber, $toNumber, $level, $bubble, $useSSL, $host, $version);
+        parent::__construct($secret, $sid, $fromNumber, $toNumber, $level, $bubble, $useSSL, $host, $version, $limit);
     }
 
     /**
@@ -43,6 +44,10 @@ class TwilioHandler extends SMSHandler
      */
     protected function buildContent($record)
     {
+        if(strlen($record['formatted']) > $this->limit){
+            $record['formatted'] = substr($record['formatted'], 0, $this->limit);
+        }
+
         $dataArray = array(
             'From' => $this->fromNumber,
             'To'   => $this->toNumber,

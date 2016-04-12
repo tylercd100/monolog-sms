@@ -26,13 +26,14 @@ class PlivoHandler extends SMSHandler
      * @param bool   $useSSL     Whether to connect via SSL.
      * @param string $host       The Plivo server hostname.
      * @param string $version    The Plivo API version (default PlivoHandler::API_V1)
+     * @param string $limit      The character limit
      */
-    public function __construct($authToken, $authId, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = self::API_V1)
+    public function __construct($authToken, $authId, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = self::API_V1, $limit = 160)
     {
         if($version !== self::API_V1){
             throw new Exception('API Version \'{$version}\' is not supported!');
         }
-        parent::__construct($authToken, $authId, $fromNumber, $toNumber, $level, $bubble, $useSSL, $host, $version);
+        parent::__construct($authToken, $authId, $fromNumber, $toNumber, $level, $bubble, $useSSL, $host, $version, $limit);
     }
     /**
      * {@inheritdoc}
@@ -42,6 +43,10 @@ class PlivoHandler extends SMSHandler
      */
     protected function buildContent($record)
     {
+        if(strlen($record['formatted']) > $this->limit){
+            $record['formatted'] = substr($record['formatted'], 0, $this->limit);
+        }
+
         $dataArray = array(
             'src'  => $this->fromNumber,
             'dst'  => $this->toNumber,
