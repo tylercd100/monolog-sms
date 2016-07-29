@@ -40,3 +40,42 @@ $logger  = new Monolog\Logger('plivo.example');
 $logger->pushHandler($handler);
 $logger->addCritical("Foo Bar!");
 ```
+
+## Usage with Symfony
+
+1. Add the handler as a service:
+
+app/config/services.yml:
+```yaml
+services:
+    plivo:
+        class: Tylercd100\Monolog\Handler\PlivoHandler
+        arguments:
+            authToken: yourauthtoken
+            authId: yourauthid
+            fromNumber: +12025550128
+            toNumber: +12025550180
+```
+
+2. Add your new services as a Monolog handler.
+app/config/monolog.yml:
+```yaml
+monolog:
+    handlers:
+        sms:
+            type: service
+            id: plivo
+            level: critical #only send sms when critical
+```
+
+3. Send a message in your controller (optional)
+```php
+public function indexAction()
+{
+    $handler = $this->get('sms');
+    
+    $logger = $this->get('logger');
+    $logger->pushHandler($handler);
+    $logger->addCritical("Foo Bar!");
+}
+```
