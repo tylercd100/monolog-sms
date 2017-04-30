@@ -49,7 +49,7 @@ class ClickatellHandler extends SMSHandler
 
         $dataArray = [
             'content' => $record['formatted'],
-            'to' => (!is_array($this>toNumber)? [$this->toNumber] : $this->toNumber)
+            'to' => (!is_array($this->toNumber)? [$this->toNumber] : $this->toNumber)
         ];
 
         ($this->fromNumber)? $dataArray["from"] = $this->fromNumber : false;

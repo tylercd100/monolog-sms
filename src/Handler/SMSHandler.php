@@ -107,9 +107,9 @@ abstract class SMSHandler extends SocketHandler
      */
     private function buildHeader($content)
     {
-        $auth = $this->authId;
+        $auth = $this->authToken;
 
-        if($this->authToken){
+        if($this->authId){
             $auth = "Basic " . base64_encode($this->authId.":".$this->authToken);
         }        
 
