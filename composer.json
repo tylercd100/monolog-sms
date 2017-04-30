@@ -1,5 +1,5 @@
 {
-    "name": "itay9001/monolog-sms",
+    "name": "tylercd100/monolog-sms",
     "description": "A fork of: A Monolog Handler for SMS messaging services such as Plivo and Twilio.",
     "keywords": [
         "monolog",
