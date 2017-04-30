@@ -40,3 +40,13 @@ $logger  = new Monolog\Logger('plivo.example');
 $logger->pushHandler($handler);
 $logger->addCritical("Foo Bar!");
 ```
+
+For Clickatell:
+```php
+use Tylercd100\Monolog\Handler\ClickatellHandler;
+
+$handler = new ClickatellHandler($authToken,$fromPhoneNumber (/*Optional*/),$toPhoneNumber (/*String|Array*/));
+$logger  = new Monolog\Logger('plivo.example');
+$logger->pushHandler($handler);
+$logger->addCritical("Foo Bar!");
+```
