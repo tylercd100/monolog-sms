@@ -6,8 +6,8 @@ use Exception;
 use Monolog\Logger;
 
 /**
-* Twilio - Monolog Handler
-* @url https://www.twilio.com/docs/api/rest/sending-messages
+* Clickatell - Monolog Handler
+* @url https://www.clickatell.com/developers/api-documentation/rest-api-request-parameters
 */
 class ClickatellHandler extends SMSHandler
 {
@@ -28,7 +28,7 @@ class ClickatellHandler extends SMSHandler
      * @param string $version    The Twilio API version (default TwilioHandler::API_V1)
      * @param string $limit      The character limit
      */
-    public function __construct($secret, $sid, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.twilio.com', $version = self::API_V1, $limit = 160)
+    public function __construct($secret, $sid, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'platform.clickatell.com', $version = self::API_V1, $limit = 160)
     {
         if($version !== self::API_V1){
             throw new Exception('API Version \'{$version}\' is not supported!');
