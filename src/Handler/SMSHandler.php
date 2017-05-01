@@ -54,8 +54,7 @@ abstract class SMSHandler extends SocketHandler
      */
     public function __construct($authToken, $authId, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = null, $limit = 160)
     {
-
-        if(empty($version)){
+        if (empty($version)) {
             throw new Exception('API Version is empty');
         }
 
@@ -69,7 +68,6 @@ abstract class SMSHandler extends SocketHandler
         $this->host       = $host;
         $this->version    = $version;
         $this->limit      = $limit;
-
     }
 
     /**
@@ -94,7 +92,7 @@ abstract class SMSHandler extends SocketHandler
 
     /**
      * Builds the URL for the API call
-     * 
+     *
      * @return string
      */
     abstract protected function buildRequestUrl();
@@ -109,14 +107,14 @@ abstract class SMSHandler extends SocketHandler
     {
         $auth = $this->authToken;
 
-        if($this->authId){
+        if ($this->authId) {
             $auth = "Basic " . base64_encode($this->authId.":".$this->authToken);
-        }        
+        }
 
         $header = $this->buildRequestUrl();
 
         $header .= "Host: {$this->host}\r\n";
-        $header .= "Authorization: ".$auth."\r\n";;
+        $header .= "Authorization: ".$auth."\r\n";
         $header .= "Content-Type: application/json\r\n";
         $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";

@@ -17,7 +17,7 @@ class ClickatellHandler extends SMSHandler
     const API_V1 = '2010-04-01';
 
     /**
-     * @param string $secret     Twilio API Secret Token     
+     * @param string $secret     Twilio API Secret Token
      * @param string $fromNumber The phone number that will be shown as the sender ID
      * @param string $toNumber   The phone number to which the message will be sent
      * @param int    $level      The minimum logging level at which this handler will be triggered
@@ -29,8 +29,8 @@ class ClickatellHandler extends SMSHandler
      */
     public function __construct($secret, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'platform.clickatell.com', $version = self::API_V1, $limit = 160)
     {
-        if($version !== self::API_V1){
-            throw new Exception('API Version \'{$version}\' is not supported!');
+        if ($version !== self::API_V1) {
+            throw new Exception("API Version \'{$version}\' is not supported!");
         }
         parent::__construct($secret, null, $fromNumber, $toNumber, $level, $bubble, $useSSL, $host, $version, $limit);
     }
@@ -43,7 +43,7 @@ class ClickatellHandler extends SMSHandler
      */
     protected function buildContent($record)
     {
-        if(strlen($record['formatted']) > $this->limit){
+        if (strlen($record['formatted']) > $this->limit) {
             $record['formatted'] = substr($record['formatted'], 0, $this->limit);
         }
 
@@ -52,14 +52,14 @@ class ClickatellHandler extends SMSHandler
             'to' => (!is_array($this->toNumber)? [$this->toNumber] : $this->toNumber)
         ];
 
-        ($this->fromNumber)? $dataArray["from"] = $this->fromNumber : false;
-        
+        ($this->fromNumber)? $dataArray['from'] = $this->fromNumber : false;
+
         return json_encode($dataArray);
     }
 
     /**
      * Builds the URL for the API call
-     * 
+     *
      * @return string
      */
     protected function buildRequestUrl()

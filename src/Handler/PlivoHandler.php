@@ -30,7 +30,7 @@ class PlivoHandler extends SMSHandler
      */
     public function __construct($authToken, $authId, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = self::API_V1, $limit = 160)
     {
-        if($version !== self::API_V1){
+        if ($version !== self::API_V1) {
             throw new Exception('API Version \'{$version}\' is not supported!');
         }
         parent::__construct($authToken, $authId, $fromNumber, $toNumber, $level, $bubble, $useSSL, $host, $version, $limit);
@@ -43,7 +43,7 @@ class PlivoHandler extends SMSHandler
      */
     protected function buildContent($record)
     {
-        if(strlen($record['formatted']) > $this->limit){
+        if (strlen($record['formatted']) > $this->limit) {
             $record['formatted'] = substr($record['formatted'], 0, $this->limit);
         }
 
@@ -57,7 +57,7 @@ class PlivoHandler extends SMSHandler
 
     /**
      * Builds the URL for the API call
-     * 
+     *
      * @return string
      */
     protected function buildRequestUrl()
