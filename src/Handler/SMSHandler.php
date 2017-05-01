@@ -107,12 +107,16 @@ abstract class SMSHandler extends SocketHandler
      */
     private function buildHeader($content)
     {
-        $auth = base64_encode($this->authId.":".$this->authToken);
+        $auth = $this->authToken;
+
+        if($this->authId){
+            $auth = "Basic " . base64_encode($this->authId.":".$this->authToken);
+        }        
 
         $header = $this->buildRequestUrl();
 
         $header .= "Host: {$this->host}\r\n";
-        $header .= "Authorization: Basic ".$auth."\r\n";;
+        $header .= "Authorization: ".$auth."\r\n";;
         $header .= "Content-Type: application/json\r\n";
         $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
