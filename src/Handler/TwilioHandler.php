@@ -26,7 +26,7 @@ class TwilioHandler extends SMSHandler
      * @param bool   $useSSL     Whether to connect via SSL.
      * @param string $host       The Twilio server hostname.
      * @param string $version    The Twilio API version (default TwilioHandler::API_V1)
-     * @param string $limit      The character limit
+     * @param int    $limit      The character limit
      */
     public function __construct($secret, $sid, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.twilio.com', $version = self::API_V1, $limit = 160)
     {

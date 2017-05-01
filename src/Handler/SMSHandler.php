@@ -41,7 +41,7 @@ abstract class SMSHandler extends SocketHandler
     protected $version;
 
     /**
-     * @var string
+     * @var integer
      */
     protected $limit;
 
@@ -55,7 +55,7 @@ abstract class SMSHandler extends SocketHandler
      * @param bool   $useSSL     Whether to connect via SSL.
      * @param string $host       The Plivo server hostname.
      * @param string $version    The Plivo API version (default PlivoHandler::API_V1)
-     * @param string $limit      The character limit
+     * @param int    $limit      The character limit
      */
     public function __construct($authToken, $authId, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = null, $limit = 160)
     {
