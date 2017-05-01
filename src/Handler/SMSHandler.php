@@ -41,6 +41,11 @@ abstract class SMSHandler extends SocketHandler
     protected $version;
 
     /**
+     * @var string
+     */
+    protected $limit;
+
+    /**
      * @param string $authToken  Plivo API Auth Token
      * @param string $authId     Plivo API Auth ID
      * @param string $fromNumber The phone number that will be shown as the sender ID
