@@ -41,6 +41,11 @@ abstract class SMSHandler extends SocketHandler
     protected $version;
 
     /**
+     * @var integer
+     */
+    protected $limit;
+
+    /**
      * @param string $authToken  Plivo API Auth Token
      * @param string $authId     Plivo API Auth ID
      * @param string $fromNumber The phone number that will be shown as the sender ID
@@ -50,12 +55,11 @@ abstract class SMSHandler extends SocketHandler
      * @param bool   $useSSL     Whether to connect via SSL.
      * @param string $host       The Plivo server hostname.
      * @param string $version    The Plivo API version (default PlivoHandler::API_V1)
-     * @param string $limit      The character limit
+     * @param int    $limit      The character limit
      */
     public function __construct($authToken, $authId, $fromNumber, $toNumber, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = null, $limit = 160)
     {
-
-        if(empty($version)){
+        if (empty($version)) {
             throw new Exception('API Version is empty');
         }
 
@@ -69,7 +73,6 @@ abstract class SMSHandler extends SocketHandler
         $this->host       = $host;
         $this->version    = $version;
         $this->limit      = $limit;
-
     }
 
     /**
@@ -94,7 +97,7 @@ abstract class SMSHandler extends SocketHandler
 
     /**
      * Builds the URL for the API call
-     * 
+     *
      * @return string
      */
     abstract protected function buildRequestUrl();
@@ -107,12 +110,16 @@ abstract class SMSHandler extends SocketHandler
      */
     private function buildHeader($content)
     {
-        $auth = base64_encode($this->authId.":".$this->authToken);
+        $auth = $this->authToken;
+
+        if ($this->authId) {
+            $auth = "Basic " . base64_encode($this->authId.":".$this->authToken);
+        }
 
         $header = $this->buildRequestUrl();
 
         $header .= "Host: {$this->host}\r\n";
-        $header .= "Authorization: Basic ".$auth."\r\n";;
+        $header .= "Authorization: ".$auth."\r\n";
         $header .= "Content-Type: application/json\r\n";
         $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";

@@ -10,8 +10,9 @@
 A Monolog Handler for SMS messaging services
 
 Currently supported
-- [Plivo](https://www.plivo.com/)
 - [Twilio](https://www.twilio.com/)
+- [Clickatell](https://www.clickatell.com/)
+- [Plivo](https://www.plivo.com/)
 
 ## Installation
 
@@ -26,7 +27,7 @@ For Plivo:
 use Tylercd100\Monolog\Handler\PlivoHandler;
 
 $handler = new PlivoHandler($token,$auth_id,$fromPhoneNumber,$toPhoneNumber);
-$logger  = new Monolog\Logger('plivo.example');
+$logger  = new Monolog\Logger('channel.name');
 $logger->pushHandler($handler);
 $logger->addCritical("Foo Bar!");
 ```
@@ -36,7 +37,17 @@ For Twilio:
 use Tylercd100\Monolog\Handler\TwilioHandler;
 
 $handler = new TwilioHandler($secret,$sid,$fromPhoneNumber,$toPhoneNumber);
-$logger  = new Monolog\Logger('plivo.example');
+$logger  = new Monolog\Logger('channel.name');
+$logger->pushHandler($handler);
+$logger->addCritical("Foo Bar!");
+```
+
+For Clickatell:
+```php
+use Tylercd100\Monolog\Handler\ClickatellHandler;
+
+$handler = new ClickatellHandler($authToken,$fromPhoneNumber (/*Optional*/),$toPhoneNumber (/*String|Array*/));
+$logger  = new Monolog\Logger('channel.name');
 $logger->pushHandler($handler);
 $logger->addCritical("Foo Bar!");
 ```
