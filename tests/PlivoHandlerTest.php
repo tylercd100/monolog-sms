@@ -13,7 +13,7 @@ class PlivoHandlerTest extends TestCase
     private $res;
     /** @var  PlivoHandler */
     private $handler;
-    
+
     public function testCanBeInstantiatedAndProvidesDefaultFormatter()
     {
         $handler = new PlivoHandler('token', 'auth_id', '+15555555555', '+16666666666');
@@ -97,11 +97,10 @@ class PlivoHandlerTest extends TestCase
     {
         $constructorArgs = array($authToken, $authId, $fromNumber, $toNumber, Logger::DEBUG, true, true, $host, $version);
         $this->res = fopen('php://memory', 'a');
-        $this->handler = $this->getMock(
-            '\Tylercd100\Monolog\Handler\PlivoHandler',
-            array('fsockopen', 'streamSetTimeout', 'closeSocket'),
-            $constructorArgs
-        );
+        $this->handler = $this->getMockBuilder(PlivoHandler::class)
+            ->setMethods(['fsockopen', 'streamSetTimeout', 'closeSocket'])
+            ->setConstructorArgs($constructorArgs)
+            ->getMock();
 
         $reflectionProperty = new \ReflectionProperty('\Monolog\Handler\SocketHandler', 'connectionString');
         $reflectionProperty->setAccessible(true);

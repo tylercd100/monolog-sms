@@ -14,7 +14,7 @@ class ClickatellHandlerTest extends TestCase
 
     /** @var  ClickatellHandler */
     private $handler;
-    
+
     public function testCanBeInstantiatedAndProvidesDefaultFormatter()
     {
         $handler = new ClickatellHandler('token', '+15555555555', '+16666666666');
@@ -97,11 +97,10 @@ class ClickatellHandlerTest extends TestCase
     {
         $constructorArgs = array($authToken, $fromNumber, $toNumber, Logger::DEBUG, true, true, $host, $version);
         $this->res = fopen('php://memory', 'a');
-        $this->handler = $this->getMock(
-            '\Tylercd100\Monolog\Handler\ClickatellHandler',
-            array('fsockopen', 'streamSetTimeout', 'closeSocket'),
-            $constructorArgs
-        );
+        $this->handler = $this->getMockBuilder(ClickatellHandler::class)
+            ->setMethods(['fsockopen', 'streamSetTimeout', 'closeSocket'])
+            ->setConstructorArgs($constructorArgs)
+            ->getMock();
 
         $reflectionProperty = new \ReflectionProperty('\Monolog\Handler\SocketHandler', 'connectionString');
         $reflectionProperty->setAccessible(true);
