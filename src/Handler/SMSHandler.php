@@ -3,6 +3,7 @@
 namespace Tylercd100\Monolog\Handler;
 
 use Exception;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\SocketHandler;
 use Monolog\Logger;
 use Tylercd100\Monolog\Formatter\SMSFormatter;
@@ -81,7 +82,7 @@ abstract class SMSHandler extends SocketHandler
      * @param  array  $record
      * @return string
      */
-    protected function generateDataStream($record)
+    protected function generateDataStream(array $record) :string
     {
         $content = $this->buildContent($record);
         return $this->buildHeader($content) . $content;
@@ -133,7 +134,7 @@ abstract class SMSHandler extends SocketHandler
      *
      * @param array $record
      */
-    protected function write(array $record)
+    protected function write(array $record) :void
     {
         parent::write($record);
         $this->closeSocket();
@@ -142,7 +143,7 @@ abstract class SMSHandler extends SocketHandler
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new SMSFormatter();
     }
