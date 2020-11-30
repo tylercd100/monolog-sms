@@ -19,15 +19,15 @@ class PlivoHandlerTest extends TestCase
         $handler = new PlivoHandler('token', 'auth_id', '+15555555555', '+16666666666');
 
         $this->assertInstanceOf('Tylercd100\\Monolog\\Formatter\\SMSFormatter', $handler->getFormatter());
-        $this->assertAttributeEquals('token',        'authToken',  $handler);
-        $this->assertAttributeEquals('auth_id',      'authId',     $handler);
-        $this->assertAttributeEquals('+15555555555', 'fromNumber', $handler);
-        $this->assertAttributeEquals('+16666666666', 'toNumber',   $handler);
+        $this->assertEquals('token',        $this->accessProtected($handler, 'authToken'));
+        $this->assertEquals('auth_id',      $this->accessProtected($handler, 'authId'));
+        $this->assertEquals('+15555555555', $this->accessProtected($handler, 'fromNumber'));
+        $this->assertEquals('+16666666666', $this->accessProtected($handler, 'toNumber'));
     }
 
     public function testItThrowsExceptionWhenUsingDifferentVersionOtherThanV1()
     {
-        $this->setExpectedException(Exception::class);
+        $this->expectException(Exception::class);
         $handler = new PlivoHandler('token', 'auth_id', '+15555555555', '+16666666666', Logger::CRITICAL, true, true, 'plivo.foo.bar', 'v2');
     }
 
@@ -38,7 +38,7 @@ class PlivoHandlerTest extends TestCase
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/POST \/v1\/Account\/auth_id\/Message\/ HTTP\/1.1\\r\\nHost: api.plivo.com\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
+        $this->assertMatchesRegularExpression('/POST \/v1\/Account\/auth_id\/Message\/ HTTP\/1.1\\r\\nHost: api.plivo.com\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
 
         return $content;
     }
@@ -50,7 +50,7 @@ class PlivoHandlerTest extends TestCase
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/POST \/v1\/Account\/auth_id\/Message\/ HTTP\/1.1\\r\\nHost: plivo.foo.bar\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
+        $this->assertMatchesRegularExpression('/POST \/v1\/Account\/auth_id\/Message\/ HTTP\/1.1\\r\\nHost: plivo.foo.bar\\r\\nAuthorization: Basic YXV0aF9pZDp0b2tlbg==\\r\\nContent-Type: application\/json\\r\\nContent-Length: \d{2,4}\\r\\n\\r\\n/', $content);
 
         return $content;
     }
@@ -60,7 +60,7 @@ class PlivoHandlerTest extends TestCase
      */
     public function testWriteContent($content)
     {
-        $this->assertRegexp('/{"src":"\+15555555555","dst":"\+16666666666","text":"test1"}/', $content);
+        $this->assertMatchesRegularExpression('/{"src":"\+15555555555","dst":"\+16666666666","text":"test1"}/', $content);
     }
 
     public function testWriteContentV1WithoutToAndFromNumbers()
@@ -70,7 +70,7 @@ class PlivoHandlerTest extends TestCase
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/{"src":false,"dst":null,"text":"test1"}/', $content);
+        $this->assertMatchesRegularExpression('/{"src":false,"dst":null,"text":"test1"}/', $content);
 
         return $content;
     }
@@ -80,7 +80,7 @@ class PlivoHandlerTest extends TestCase
      */
     public function testWriteContentNotify($content)
     {
-        $this->assertRegexp('/{"src":"\+15555555555","dst":"\+16666666666","text":"test1"}/', $content);
+        $this->assertMatchesRegularExpression('/{"src":"\+15555555555","dst":"\+16666666666","text":"test1"}/', $content);
     }
 
     public function testWriteWithComplexMessage()
@@ -90,7 +90,7 @@ class PlivoHandlerTest extends TestCase
         fseek($this->res, 0);
         $content = fread($this->res, 1024);
 
-        $this->assertRegexp('/{"src":"\+15555555555","dst":"\+16666666666","text":"Backup of database example finished in 16 minutes\."}/', $content);
+        $this->assertMatchesRegularExpression('/{"src":"\+15555555555","dst":"\+16666666666","text":"Backup of database example finished in 16 minutes\."}/', $content);
     }
 
     private function createHandler($authToken = 'token', $authId = 'auth_id', $fromNumber = '+15555555555', $toNumber = '+16666666666', $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $host = 'api.plivo.com', $version = PlivoHandler::API_V1)
